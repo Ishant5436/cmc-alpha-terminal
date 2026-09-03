@@ -1,8 +1,8 @@
 # CMC-Alpha-Terminal
 
 > **Institutional-Grade Quantitative Intelligence & FastMCP Agent Terminal Powered by CoinMarketCap Pro API**  
-> *Target Competition:* CoinMarketCap: Build with CMC: API Hackathon ($10,000 USD Prize Pool)  
-> *Standards:* Deterministic Safety Invariants (Holzmann's Power of 10), Zero Heap on Hot Path, Sub-Millisecond Execution
+> *Target Competition:* CoinMarketCap: Build with CMC: API Hackathon (Prize: CMC Pro-API 1-Year Grant + Ecosystem Support for Top 3 Projects)  
+> *Standards:* Deterministic Safety Invariants (Power of 10), Zero Heap on Hot Path, Sub-Millisecond Execution
 
 [![CI Pipeline](https://img.shields.io/badge/CI-Passing-brightgreen)]()
 [![Tests](https://img.shields.io/badge/Tests-19%2F19%20Passed-brightgreen)](tests/)
@@ -37,9 +37,9 @@ graph TD
 
 ---
 
-## 2. Deterministic Safety Invariants (Holzmann's Power of 10)
+## 2. Deterministic Safety Invariants (Power of 10)
 
-The core C++20 engine strictly adheres to Gerard J. Holzmann's Power of 10 safety invariants:
+The core C++20 engine strictly adheres to Deterministic Safety Invariants (Power of 10):
 1. **Simple Control Flow:** Zero `goto`, `setjmp`, `longjmp`, or recursion.
 2. **Bounded Loops:** All loops have fixed, compile-time bounds (`MAX_ASSETS = 256`, `LOOKBACK_WINDOW = 64`).
 3. **Zero Dynamic Allocation:** Static pre-allocation with ring buffers; zero `malloc` or `new` on the hot processing path.

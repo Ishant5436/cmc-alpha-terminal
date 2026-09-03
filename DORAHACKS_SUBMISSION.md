@@ -1,6 +1,6 @@
 # DoraHacks BUIDL Submission Package
 
-**Hackathon:** CoinMarketCap: Build with CMC: API Hackathon ($10,000 USD Prize Pool)  
+**Hackathon:** CoinMarketCap: Build with CMC: API Hackathon (Prize: CMC Pro-API 1-Year Grant + Ecosystem Support for Top 3 Projects)  
 **Project Name:** CMC-Alpha-Terminal  
 **Track:** Developer Tooling / Trading Intelligence / AI Agent Infrastructure  
 **Author / Hacker:** Ishant Panchal (`@Ishant5436` / `ishant.p@somaiya.edu`)  
@@ -20,7 +20,7 @@ Autonomous AI agents and quantitative execution bots need sub-millisecond market
 
 ## 3. The Solution
 `CMC-Alpha-Terminal` combines:
-1. **Deterministic C++20 Core:** Zero-heap Welford variance tracking, monotonic lookback extrema deques, and Parkinson realized volatility kernels adhering strictly to Gerard J. Holzmann's Power of 10 safety invariants.
+1. **Deterministic C++20 Core:** Zero-heap Welford variance tracking, monotonic lookback extrema deques, and Parkinson realized volatility kernels adhering strictly to Deterministic Safety Invariants (Power of 10).
 2. **CoinMarketCap Pro API Ingestion:** Real-time `/cryptocurrency/listings/latest`, `/quotes/latest`, and `/global-metrics/quotes/latest` ingestion with offline snapshot replay for reproducible evaluation.
 3. **FastMCP Server for AI Agents:** 5 production MCP tools enabling LLMs to screen momentum, detect volatility regimes, audit liquidity depth, and generate execution directives (`LONG`, `HOLD`, `AVOID`).
 4. **Interactive ANSI Terminal Dashboard:** Real-time ASCII terminal monitor launchable via `make demo`.
