@@ -32,3 +32,21 @@ Autonomous AI agents and quantitative execution bots need sub-millisecond market
 - **Compiler Invariants:** `-std=c++20 -O3 -Wall -Wextra -Wpedantic -Werror` (Zero warnings on Apple Silicon ARM64 & Linux)
 - **Latency:** Sub-microsecond C++ inference; $< 50$ ms MCP tool dispatch.
 - **Offline Mode:** 100% reproducible for judges without live API keys.
+
+---
+
+## 5. Visual Walkthrough & Demo Commands
+
+- **Visual Terminal Demo:** [`assets/cmc_terminal_demo.gif`](https://raw.githubusercontent.com/Ishant5436/cmc-alpha-terminal/main/assets/cmc_terminal_demo.gif)
+- **Video Walkthrough:** [`assets/cmc_terminal_demo.mp4`](https://github.com/Ishant5436/cmc-alpha-terminal/raw/main/assets/cmc_terminal_demo.mp4)
+
+```bash
+# 1. Clone & Run Complete Test Suite (19/19 Passing)
+git clone https://github.com/Ishant5436/cmc-alpha-terminal.git
+cd cmc-alpha-terminal
+make test
+
+# 2. Launch Interactive Terminal Demo (Offline Mock Engine)
+make demo
+```
+
