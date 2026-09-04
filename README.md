@@ -10,6 +10,10 @@
 [![FastMCP](https://img.shields.io/badge/FastMCP-5%20Production%20Tools-purple)](python/cmc_terminal/server.py)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
+> **1-Second Instant Demo:** `make demo`
+
+![CMC Terminal Demo](assets/cmc_terminal_demo.gif)
+
 ---
 
 ## 1. Overview & Architecture

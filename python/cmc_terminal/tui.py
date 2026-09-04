@@ -5,7 +5,11 @@ Provides real-time terminal rendering with ANSI formatting, volatility gauges, a
 
 import sys
 import asyncio
+from pathlib import Path
 from typing import List, Dict, Any
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from cmc_terminal.client import CMCClient
 
 
