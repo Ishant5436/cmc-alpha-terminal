@@ -22,12 +22,14 @@ class CMCClient:
         self.api_key = api_key or os.environ.get("CMC_PRO_API_KEY") or os.environ.get("CMC_API_KEY")
         self.base_url = base_url.rstrip("/")
         self.is_offline_mode = not bool(self.api_key)
+        self.last_data_source = "offline_fixture" if self.is_offline_mode else "uninitialized"
 
     async def get_listings(self, limit: int = 50) -> List[Dict[str, Any]]:
         """Fetch latest cryptocurrency listings, falling back to sample dataset if offline."""
         assert limit > 0, "limit must be strictly positive"
 
         if self.is_offline_mode:
+            self.last_data_source = "offline_fixture"
             return SAMPLE_LISTINGS[:limit]
 
         url = f"{self.base_url}/v1/cryptocurrency/listings/latest"
@@ -62,17 +64,21 @@ class CMCClient:
                             "low_24h_usd": quote.get("price", 0.0) * 0.98,
                             "circulating_supply": item.get("circulating_supply", 0.0)
                         })
+                    self.last_data_source = "live_api"
                     return parsed
                 else:
                     logger.warning(f"CMC API responded with status {res.status_code}. Falling back to sample dataset.")
+                    self.last_data_source = "offline_fixture"
                     return SAMPLE_LISTINGS[:limit]
         except Exception as err:
             logger.warning(f"Network call failed: {err}. Falling back to sample dataset.")
+            self.last_data_source = "offline_fixture"
             return SAMPLE_LISTINGS[:limit]
 
     async def get_global_metrics(self) -> Dict[str, Any]:
         """Fetch global cryptocurrency market metrics."""
         if self.is_offline_mode:
+            self.last_data_source = "offline_fixture"
             return SAMPLE_GLOBAL_METRICS
 
         url = f"{self.base_url}/v1/global-metrics/quotes/latest"
@@ -86,6 +92,7 @@ class CMCClient:
                 res = await client.get(url, headers=headers)
                 if res.status_code == 200:
                     d = res.json().get("data", {}).get("quote", {}).get("USD", {})
+                    self.last_data_source = "live_api"
                     return {
                         "total_market_cap_usd": d.get("total_market_cap", 0.0),
                         "total_volume_24h_usd": d.get("total_volume_24h", 0.0),
@@ -94,8 +101,10 @@ class CMCClient:
                         "defi_volume_24h_usd": d.get("defi_volume_24h", 0.0),
                         "updated_at": d.get("last_updated", "")
                     }
+                self.last_data_source = "offline_fixture"
                 return SAMPLE_GLOBAL_METRICS
         except Exception:
+            self.last_data_source = "offline_fixture"
             return SAMPLE_GLOBAL_METRICS
 
     async def get_quote(self, symbol: str) -> Optional[Dict[str, Any]]:

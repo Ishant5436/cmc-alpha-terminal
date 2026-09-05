@@ -5,7 +5,7 @@
 > *Standards:* Deterministic Safety Invariants (Power of 10), Zero Heap on Hot Path, Sub-Millisecond Execution
 
 [![CI Pipeline](https://img.shields.io/badge/CI-Passing-brightgreen)]()
-[![Tests](https://img.shields.io/badge/Tests-19%2F19%20Passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-20%2F20%20Passed-brightgreen)](tests/)
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-20%20Zero--Heap-blue)](include/)
 [![FastMCP](https://img.shields.io/badge/FastMCP-5%20Production%20Tools-purple)](python/cmc_terminal/server.py)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -57,17 +57,46 @@ The core C++20 engine strictly adheres to Deterministic Safety Invariants (Power
 
 ---
 
-## 3. FastMCP Agent Tools
+## 3. FastMCP Agent Tools & Client Integration
 
-The FastMCP server (`python3 -m cmc_terminal.server`) exposes 5 tools for LLMs:
+The FastMCP server (`python3 -m cmc_terminal.server`) exposes 5 production tools designed for autonomous LLM agent loops (Claude Desktop, Claude Code, Gemini CLI):
 
-| Tool Name | Parameters | Purpose |
-| :--- | :--- | :--- |
-| `cmc_screen_momentum` | `top_n: int`, `min_volume_usd: float` | Multi-factor cross-sectional momentum ranking across liquid crypto assets. |
-| `cmc_volatility_regime` | `symbol: str` | Computes Parkinson extreme-value volatility and classifies regime (`COMPRESSION`, `TRENDING`, `VOLATILE`). |
-| `cmc_liquidity_depth` | `symbol: str` | Analyzes volume-to-market-cap ratio, liquidity quality grade, and slippage drag. |
-| `cmc_global_macro` | *(none)* | Global market cap, 24h volume, BTC/ETH dominance, and macro market cycle phase. |
-| `cmc_alpha_signals` | `limit: int` | Multi-factor composite signals with execution directives (`LONG`, `HOLD`, `AVOID`). |
+| Tool Name | Parameters | Returns | Purpose |
+| :--- | :--- | :--- | :--- |
+| `cmc_screen_momentum` | `top_n: int`, `min_volume_usd: float` | `Dict[str, Any]` | Multi-factor cross-sectional momentum ranking across liquid crypto assets. |
+| `cmc_volatility_regime` | `symbol: str` | `Dict[str, Any]` | Computes Parkinson extreme-value volatility and classifies regime (`COMPRESSION`, `TRENDING`, `EXPANSION_VOLATILE`). |
+| `cmc_liquidity_depth` | `symbol: str` | `Dict[str, Any]` | Analyzes volume-to-market-cap ratio, liquidity quality grade, and slippage drag. |
+| `cmc_global_macro` | *(none)* | `Dict[str, Any]` | Global market cap, 24h volume, BTC/ETH dominance, and macro cycle phase. |
+| `cmc_alpha_signals` | `limit: int` | `Dict[str, Any]` | Multi-factor composite signals with execution directives (`LONG`, `HOLD`, `AVOID`). |
+
+### Dual-Mode Output Architecture
+Every tool returns a structured JSON dictionary containing:
+1. **Programmatic Keys for Agent Tool-Chaining:** Pure typed payloads (`assets`, `signals`, `regime`, `parkinson_vol`, `data_source`) enabling downstream agent reasoning, math transformations, and automated order execution without parsing markdown.
+2. **`formatted_markdown` for Direct Display:** A clean, human-readable terminal/chat rendering for LLM conversational contexts.
+3. **`data_source` Transparency:** Explicitly labels whether data originated from `"live_api"` or `"offline_fixture"`.
+
+### MCP Client Configuration (Claude Desktop / Claude Code)
+To connect `cmc-alpha-terminal` to Claude Desktop or Claude Code, add the following to your configuration file (e.g. `~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "cmc-alpha-terminal": {
+      "command": "python3",
+      "args": ["-m", "cmc_terminal.server"],
+      "cwd": "/path/to/cmc-alpha-terminal",
+      "env": {
+        "CMC_PRO_API_KEY": "<OPTIONAL_LIVE_KEY>"
+      }
+    }
+  }
+}
+```
+
+Or run directly in Claude Code CLI:
+```bash
+claude mcp add cmc-alpha-terminal -- python3 -m cmc_terminal.server
+```
 
 ---
 
@@ -75,7 +104,7 @@ The FastMCP server (`python3 -m cmc_terminal.server`) exposes 5 tools for LLMs:
 
 ### Build & Run Tests (C++ and Python)
 ```bash
-# Run complete test suite (19/19 tests)
+# Run complete test suite (20/20 tests passing)
 make test
 
 # Run C++ tests only

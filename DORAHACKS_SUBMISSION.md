@@ -28,8 +28,9 @@ Autonomous AI agents and quantitative execution bots need sub-millisecond market
 ---
 
 ## 4. Technical Metrics
-- **Tests Passing:** 19/19 (4 C++20 + 15 Python FastMCP tests)
+- **Tests Passing:** 20/20 (4 C++20 + 16 Python FastMCP tests)
 - **Compiler Invariants:** `-std=c++20 -O3 -Wall -Wextra -Wpedantic -Werror` (Zero warnings on Apple Silicon ARM64 & Linux)
+- **Dual-Mode FastMCP Server:** Returns programmatic typed dictionaries for autonomous agent tool-chaining alongside formatted markdown for LLM chat display.
 - **Latency:** Sub-microsecond C++ inference; $< 50$ ms MCP tool dispatch.
 - **Offline Mode:** 100% reproducible for judges without live API keys.
 
@@ -41,12 +42,29 @@ Autonomous AI agents and quantitative execution bots need sub-millisecond market
 - **Video Walkthrough:** [`assets/cmc_terminal_demo.mp4`](https://github.com/Ishant5436/cmc-alpha-terminal/raw/main/assets/cmc_terminal_demo.mp4)
 
 ```bash
-# 1. Clone & Run Complete Test Suite (19/19 Passing)
+# 1. Clone & Run Complete Test Suite (20/20 Passing)
 git clone https://github.com/Ishant5436/cmc-alpha-terminal.git
 cd cmc-alpha-terminal
 make test
 
 # 2. Launch Interactive Terminal Demo (Offline Mock Engine)
 make demo
+```
+
+### Claude Desktop / Claude Code Integration
+Add to `claude_desktop_config.json`:
+```json
+{
+  "mcpServers": {
+    "cmc-alpha-terminal": {
+      "command": "python3",
+      "args": ["-m", "cmc_terminal.server"],
+      "cwd": "/path/to/cmc-alpha-terminal",
+      "env": {
+        "CMC_PRO_API_KEY": "<OPTIONAL_LIVE_KEY>"
+      }
+    }
+  }
+}
 ```
 
