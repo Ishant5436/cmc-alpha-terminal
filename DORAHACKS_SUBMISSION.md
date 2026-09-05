@@ -28,7 +28,7 @@ Autonomous AI agents and quantitative execution bots need sub-millisecond market
 ---
 
 ## 4. Technical Metrics
-- **Tests Passing:** 20/20 (4 C++20 + 16 Python FastMCP tests)
+- **Tests Passing:** 21/21 (4 C++20 + 17 Python FastMCP tests)
 - **Compiler Invariants:** `-std=c++20 -O3 -Wall -Wextra -Wpedantic -Werror` (Zero warnings on Apple Silicon ARM64 & Linux)
 - **Dual-Mode FastMCP Server:** Returns programmatic typed dictionaries for autonomous agent tool-chaining alongside formatted markdown for LLM chat display.
 - **Latency:** Sub-microsecond C++ inference; $< 50$ ms MCP tool dispatch.
@@ -42,7 +42,7 @@ Autonomous AI agents and quantitative execution bots need sub-millisecond market
 - **Video Walkthrough:** [`assets/cmc_terminal_demo.mp4`](https://github.com/Ishant5436/cmc-alpha-terminal/raw/main/assets/cmc_terminal_demo.mp4)
 
 ```bash
-# 1. Clone & Run Complete Test Suite (20/20 Passing)
+# 1. Clone & Run Complete Test Suite (21/21 Passing)
 git clone https://github.com/Ishant5436/cmc-alpha-terminal.git
 cd cmc-alpha-terminal
 make test

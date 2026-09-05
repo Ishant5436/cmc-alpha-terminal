@@ -79,3 +79,44 @@ def test_mcp_input_validation():
 
     with pytest.raises(AssertionError):
         asyncio.run(cmc_volatility_regime(""))
+
+
+def test_mcp_none_value_resilience(monkeypatch):
+    """Verify that FastMCP tools handle explicit None values from CMC without TypeError crashes."""
+    from cmc_terminal import server
+
+    mock_listings = [
+        {
+            "id": 999,
+            "name": "NullCoin",
+            "symbol": "NULL",
+            "price_usd": 1.50,
+            "percent_change_24h": None,
+            "percent_change_7d": None,
+            "volume_24h_usd": None,
+            "market_cap_usd": None,
+            "high_24h_usd": 1.60,
+            "low_24h_usd": 1.40,
+            "circulating_supply": None
+        }
+    ]
+
+    async def mock_get_listings(limit=100):
+        return mock_listings
+
+    monkeypatch.setattr(server.client, "get_listings", mock_get_listings)
+
+    # cmc_screen_momentum should filter out None volume safely
+    screen_res = asyncio.run(server.cmc_screen_momentum(top_n=5, min_volume_usd=1000.0))
+    assert screen_res["filtered_count"] == 0
+
+    # cmc_alpha_signals should handle None gracefully
+    signals_res = asyncio.run(server.cmc_alpha_signals(limit=5))
+    assert len(signals_res["signals"]) == 1
+    assert signals_res["signals"][0]["symbol"] == "NULL"
+
+    # cmc_liquidity_depth should handle None volume and market cap
+    liq_res = asyncio.run(server.cmc_liquidity_depth("NULL"))
+    assert liq_res["symbol"] == "NULL"
+    assert liq_res["turnover_ratio"] == 0.0
+

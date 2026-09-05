@@ -5,7 +5,7 @@
 > *Standards:* Deterministic Safety Invariants (Power of 10), Zero Heap on Hot Path, Sub-Millisecond Execution
 
 [![CI Pipeline](https://img.shields.io/badge/CI-Passing-brightgreen)]()
-[![Tests](https://img.shields.io/badge/Tests-20%2F20%20Passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-21%2F21%20Passed-brightgreen)](tests/)
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-20%20Zero--Heap-blue)](include/)
 [![FastMCP](https://img.shields.io/badge/FastMCP-5%20Production%20Tools-purple)](python/cmc_terminal/server.py)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -104,7 +104,7 @@ claude mcp add cmc-alpha-terminal -- python3 -m cmc_terminal.server
 
 ### Build & Run Tests (C++ and Python)
 ```bash
-# Run complete test suite (20/20 tests passing)
+# Run complete test suite (21/21 tests passing)
 make test
 
 # Run C++ tests only

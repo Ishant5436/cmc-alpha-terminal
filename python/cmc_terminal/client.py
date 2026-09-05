@@ -55,14 +55,14 @@ class CMCClient:
                             "id": item.get("id"),
                             "name": item.get("name"),
                             "symbol": item.get("symbol"),
-                            "price_usd": quote.get("price", 0.0),
-                            "percent_change_24h": quote.get("percent_change_24h", 0.0),
-                            "percent_change_7d": quote.get("percent_change_7d", 0.0),
-                            "volume_24h_usd": quote.get("volume_24h", 0.0),
-                            "market_cap_usd": quote.get("market_cap", 0.0),
-                            "high_24h_usd": quote.get("price", 0.0) * 1.02, # Estimate if 24h high absent
-                            "low_24h_usd": quote.get("price", 0.0) * 0.98,
-                            "circulating_supply": item.get("circulating_supply", 0.0)
+                            "price_usd": quote.get("price") or 0.0,
+                            "percent_change_24h": quote.get("percent_change_24h") or 0.0,
+                            "percent_change_7d": quote.get("percent_change_7d") or 0.0,
+                            "volume_24h_usd": quote.get("volume_24h") or 0.0,
+                            "market_cap_usd": quote.get("market_cap") or 0.0,
+                            "high_24h_usd": (quote.get("price") or 0.0) * 1.02, # Estimate if 24h high absent
+                            "low_24h_usd": (quote.get("price") or 0.0) * 0.98,
+                            "circulating_supply": item.get("circulating_supply") or 0.0
                         })
                     self.last_data_source = "live_api"
                     return parsed

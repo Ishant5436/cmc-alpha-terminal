@@ -24,7 +24,7 @@ async def cmc_screen_momentum(top_n: int = 10, min_volume_usd: float = 100_000_0
     assert min_volume_usd >= 0.0, "min_volume_usd must be non-negative"
 
     listings = await client.get_listings(limit=100)
-    filtered = [item for item in listings if item.get("volume_24h_usd", 0.0) >= min_volume_usd]
+    filtered = [item for item in listings if (item.get("volume_24h_usd") or 0.0) >= min_volume_usd]
 
     if not filtered:
         return {
@@ -40,9 +40,9 @@ async def cmc_screen_momentum(top_n: int = 10, min_volume_usd: float = 100_000_0
     for item in filtered:
         mcap = item.get("market_cap_usd") or 0.0
         score = client.calculate_momentum_score(
-            item.get("percent_change_24h", 0.0),
-            item.get("percent_change_7d", 0.0),
-            item.get("volume_24h_usd", 0.0),
+            item.get("percent_change_24h") or 0.0,
+            item.get("percent_change_7d") or 0.0,
+            item.get("volume_24h_usd") or 0.0,
             mcap
         )
         scored.append({**item, "momentum_score": score})
@@ -171,7 +171,7 @@ async def cmc_liquidity_depth(symbol: str) -> Dict[str, Any]:
             "formatted_markdown": err_msg
         }
 
-    vol_24h = quote.get("volume_24h_usd", 0.0)
+    vol_24h = quote.get("volume_24h_usd") or 0.0
     mcap = quote.get("market_cap_usd") or 0.0
 
     if mcap <= 0.0:
@@ -266,9 +266,9 @@ async def cmc_alpha_signals(limit: int = 5) -> Dict[str, Any]:
 
     signals = []
     for item in listings:
-        chg_24h = item.get("percent_change_24h", 0.0)
-        chg_7d = item.get("percent_change_7d", 0.0)
-        vol_24h = item.get("volume_24h_usd", 0.0)
+        chg_24h = item.get("percent_change_24h") or 0.0
+        chg_7d = item.get("percent_change_7d") or 0.0
+        vol_24h = item.get("volume_24h_usd") or 0.0
         mcap = item.get("market_cap_usd") or 0.0
         high = item.get("high_24h_usd", item["price_usd"])
         low = item.get("low_24h_usd", item["price_usd"])
