@@ -38,14 +38,24 @@ async def cmc_screen_momentum(top_n: int = 10, min_volume_usd: float = 100_000_0
     # Compute momentum scores
     scored = []
     for item in filtered:
-        mcap = item.get("market_cap_usd") or 0.0
+        # Normalize every CMC-sourced numeric field once here so every
+        # downstream read (structured output, markdown formatting) sees a
+        # clean float even when CoinMarketCap returns an explicit None
+        # rather than omitting the key.
+        clean_item = {
+            **item,
+            "percent_change_24h": item.get("percent_change_24h") or 0.0,
+            "percent_change_7d": item.get("percent_change_7d") or 0.0,
+            "volume_24h_usd": item.get("volume_24h_usd") or 0.0,
+            "market_cap_usd": item.get("market_cap_usd") or 0.0,
+        }
         score = client.calculate_momentum_score(
-            item.get("percent_change_24h") or 0.0,
-            item.get("percent_change_7d") or 0.0,
-            item.get("volume_24h_usd") or 0.0,
-            mcap
+            clean_item["percent_change_24h"],
+            clean_item["percent_change_7d"],
+            clean_item["volume_24h_usd"],
+            clean_item["market_cap_usd"],
         )
-        scored.append({**item, "momentum_score": score})
+        scored.append({**clean_item, "momentum_score": score})
 
     scored.sort(key=lambda x: x["momentum_score"], reverse=True)
     selected = scored[:top_n]
