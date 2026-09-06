@@ -2,6 +2,7 @@
 
 **Hackathon:** CoinMarketCap: Build with CMC: API Hackathon (Prize: CMC Pro-API 1-Year Grant + Ecosystem Support for Top 3 Projects)  
 **Project Name:** CMC-Alpha-Terminal  
+**DoraHacks BUIDL:** https://dorahacks.io/buidl/48301  
 **Track:** Developer Tooling / Trading Intelligence / AI Agent Infrastructure  
 **Author / Hacker:** Ishant Panchal (`@Ishant5436` / `ishant.p@somaiya.edu`)  
 **Repository:** https://github.com/Ishant5436/cmc-alpha-terminal  

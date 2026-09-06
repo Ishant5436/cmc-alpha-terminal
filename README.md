@@ -6,6 +6,7 @@
 
 [![CI Pipeline](https://img.shields.io/badge/CI-Passing-brightgreen)]()
 [![Tests](https://img.shields.io/badge/Tests-21%2F21%20Passed-brightgreen)](tests/)
+[![DoraHacks BUIDL](https://img.shields.io/badge/DoraHacks-BUIDL%20%2348301-orange)](https://dorahacks.io/buidl/48301)
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-20%20Zero--Heap-blue)](include/)
 [![FastMCP](https://img.shields.io/badge/FastMCP-5%20Production%20Tools-purple)](python/cmc_terminal/server.py)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
