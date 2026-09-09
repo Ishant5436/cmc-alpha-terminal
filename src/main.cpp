@@ -36,6 +36,8 @@ static const AssetFeed BENCHMARK_UNIVERSE[] = {
 static constexpr std::size_t UNIVERSE_SIZE = sizeof(BENCHMARK_UNIVERSE) / sizeof(BENCHMARK_UNIVERSE[0]);
 
 static void print_header() noexcept {
+    assert(UNIVERSE_SIZE > 0);
+    assert(BENCHMARK_UNIVERSE != nullptr);
     std::cout << "\n========================================================================================\n";
     std::cout << "                 CMC-ALPHA-TERMINAL: C++20 QUANTITATIVE CORE ENGINE                     \n";
     std::cout << "        Zero-Heap High-Frequency Regime Classifier & Cross-Sectional Alpha Ranker        \n";
@@ -137,6 +139,7 @@ static void analyze_universe() noexcept {
 
 int main(int argc, char* argv[]) {
     assert(argc >= 1);
+    assert(argv != nullptr);
     (void)argv;
     print_header();
     analyze_universe();

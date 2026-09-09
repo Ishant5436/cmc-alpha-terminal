@@ -1,5 +1,4 @@
-#ifndef CMC_ALPHA_WELFORD_HPP
-#define CMC_ALPHA_WELFORD_HPP
+#pragma once
 
 #include <cstddef>
 #include <cmath>
@@ -62,5 +61,3 @@ public:
 };
 
 } // namespace cmc
-
-#endif // CMC_ALPHA_WELFORD_HPP

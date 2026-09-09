@@ -1,5 +1,4 @@
-#ifndef CMC_ALPHA_RANKER_HPP
-#define CMC_ALPHA_RANKER_HPP
+#pragma once
 
 #include <cstddef>
 #include <cassert>
@@ -96,5 +95,3 @@ public:
 };
 
 } // namespace cmc
-
-#endif // CMC_ALPHA_RANKER_HPP

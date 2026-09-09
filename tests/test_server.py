@@ -1,5 +1,4 @@
 import asyncio
-import pytest
 from cmc_terminal.server import (
     cmc_screen_momentum,
     cmc_volatility_regime,

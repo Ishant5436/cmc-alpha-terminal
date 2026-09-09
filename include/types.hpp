@@ -1,5 +1,4 @@
-#ifndef CMC_ALPHA_TYPES_HPP
-#define CMC_ALPHA_TYPES_HPP
+#pragma once
 
 #include <cstdint>
 #include <cstddef>
@@ -62,5 +61,3 @@ struct CMCTick {
 };
 
 } // namespace cmc
-
-#endif // CMC_ALPHA_TYPES_HPP

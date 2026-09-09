@@ -1,5 +1,4 @@
-#ifndef CMC_ALPHA_PARKINSON_VOL_HPP
-#define CMC_ALPHA_PARKINSON_VOL_HPP
+#pragma once
 
 #include <cstddef>
 #include <cmath>
@@ -68,5 +67,3 @@ public:
 };
 
 } // namespace cmc
-
-#endif // CMC_ALPHA_PARKINSON_VOL_HPP

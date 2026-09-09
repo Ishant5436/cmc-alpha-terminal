@@ -4,7 +4,7 @@ Exposes 5 institutional-grade quantitative screening and regime detection tools 
 """
 
 import math
-from typing import Dict, Any, List
+from typing import Dict, Any
 from mcp.server.fastmcp import FastMCP
 from cmc_terminal.client import CMCClient
 
