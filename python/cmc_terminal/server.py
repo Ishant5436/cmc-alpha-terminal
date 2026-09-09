@@ -20,8 +20,12 @@ async def cmc_screen_momentum(top_n: int = 10, min_volume_usd: float = 100_000_0
     Filters by minimum 24h USD volume and returns rank-ordered institutional candidates.
     Returns structured JSON with candidates list and formatted markdown report for agent tool chaining.
     """
-    assert top_n > 0, "top_n must be positive"
-    assert min_volume_usd >= 0.0, "min_volume_usd must be non-negative"
+    if not (isinstance(top_n, int) and top_n > 0):
+        err_msg = "Error: top_n must be a positive integer."
+        return {"error": err_msg, "formatted_markdown": err_msg}
+    if not (isinstance(min_volume_usd, (int, float)) and min_volume_usd >= 0.0):
+        err_msg = "Error: min_volume_usd must be a non-negative number."
+        return {"error": err_msg, "formatted_markdown": err_msg}
 
     listings = await client.get_listings(limit=100)
     filtered = [item for item in listings if (item.get("volume_24h_usd") or 0.0) >= min_volume_usd]
@@ -106,7 +110,10 @@ async def cmc_volatility_regime(symbol: str) -> Dict[str, Any]:
     Regimes: COMPRESSION (low vol, consolidation), TRENDING (moderate vol, momentum), EXPANSION_VOLATILE (high risk).
     Returns structured volatility metrics, regime classification, and formatted markdown report.
     """
-    assert symbol and isinstance(symbol, str), "symbol must be a valid non-empty string"
+    if not (symbol and isinstance(symbol, str)):
+        err_msg = "Error: symbol must be a valid non-empty string."
+        return {"error": err_msg, "formatted_markdown": err_msg}
+
     clean_sym = symbol.strip().upper()
     quote = await client.get_quote(clean_sym)
 
@@ -168,7 +175,10 @@ async def cmc_liquidity_depth(symbol: str) -> Dict[str, Any]:
     Analyze institutional liquidity depth, volume-to-market-cap turnover, and execution slippage risks.
     Returns structured turnover ratio, liquidity grade, slippage estimates, and formatted markdown report.
     """
-    assert symbol and isinstance(symbol, str), "symbol must be a valid non-empty string"
+    if not (symbol and isinstance(symbol, str)):
+        err_msg = "Error: symbol must be a valid non-empty string."
+        return {"error": err_msg, "formatted_markdown": err_msg}
+
     clean_sym = symbol.strip().upper()
     quote = await client.get_quote(clean_sym)
 
@@ -271,7 +281,10 @@ async def cmc_alpha_signals(limit: int = 5) -> Dict[str, Any]:
     Generate quantitative multi-factor alpha signals (Momentum + Volatility Penalty + Liquidity Guard).
     Returns recommended execution directives (LONG / NEUTRAL / AVOID) and formatted markdown report.
     """
-    assert limit > 0, "limit must be positive"
+    if not (isinstance(limit, int) and limit > 0):
+        err_msg = "Error: limit must be a positive integer."
+        return {"error": err_msg, "formatted_markdown": err_msg}
+
     listings = await client.get_listings(limit=25)
 
     signals = []

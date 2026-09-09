@@ -32,12 +32,14 @@ public:
     }
 
     [[nodiscard]] double mean() const noexcept {
-        assert(n_ >= 0);
+        assert(std::isfinite(mean_));
+        assert(m2_ >= 0.0);
         return mean_;
     }
 
     [[nodiscard]] double sample_variance() const noexcept {
-        assert(n_ >= 0);
+        assert(std::isfinite(m2_));
+        assert(m2_ >= 0.0);
         if (n_ < 2) {
             return 0.0;
         }
@@ -51,11 +53,11 @@ public:
     }
 
     void reset() noexcept {
-        assert(n_ >= 0);
         n_ = 0;
         mean_ = 0.0;
         m2_ = 0.0;
         assert(n_ == 0);
+        assert(mean_ == 0.0 && m2_ == 0.0);
     }
 };
 

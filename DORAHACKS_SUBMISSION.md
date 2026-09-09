@@ -23,7 +23,7 @@ Autonomous AI agents and quantitative execution bots need sub-millisecond market
 `CMC-Alpha-Terminal` combines:
 1. **Deterministic C++20 Core:** Zero-heap Welford variance tracking, monotonic lookback extrema deques, and Parkinson realized volatility kernels adhering strictly to Deterministic Safety Invariants (Power of 10).
 2. **CoinMarketCap Pro API Ingestion:** Real-time `/cryptocurrency/listings/latest`, `/quotes/latest`, and `/global-metrics/quotes/latest` ingestion with offline snapshot replay for reproducible evaluation.
-3. **FastMCP Server for AI Agents:** 5 production MCP tools enabling LLMs to screen momentum, detect volatility regimes, audit liquidity depth, and generate execution directives (`LONG`, `HOLD`, `AVOID`).
+3. **FastMCP Server for AI Agents:** 5 production MCP tools enabling LLMs to screen momentum, detect volatility regimes, audit liquidity depth, and generate execution directives (`LONG`, `NEUTRAL`, `AVOID`).
 4. **Interactive ANSI Terminal Dashboard:** Real-time ASCII terminal monitor launchable via `make demo`.
 
 ---
@@ -32,7 +32,7 @@ Autonomous AI agents and quantitative execution bots need sub-millisecond market
 - **Tests Passing:** 21/21 (4 C++20 + 17 Python FastMCP tests)
 - **Compiler Invariants:** `-std=c++20 -O3 -Wall -Wextra -Wpedantic -Werror` (Zero warnings on Apple Silicon ARM64 & Linux)
 - **Dual-Mode FastMCP Server:** Returns programmatic typed dictionaries for autonomous agent tool-chaining alongside formatted markdown for LLM chat display.
-- **Latency:** Sub-microsecond C++ inference; $< 50$ ms MCP tool dispatch.
+- **Latency (measured, not estimated):** C++ inference over the 10-asset benchmark universe: 1.17-2.71 microseconds per run, timed with `std::chrono::steady_clock` around the ranking and volatility computation only (excludes terminal I/O) - see `src/main.cpp`. Offline-mode MCP tool dispatch (`cmc_screen_momentum`, fixture data, 10 runs): 0.020-0.026 ms. Live-API mode latency is dominated by network round-trip time to CoinMarketCap and was not benchmarked here.
 - **Offline Mode:** 100% reproducible for judges without live API keys.
 
 ---

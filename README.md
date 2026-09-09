@@ -46,7 +46,7 @@ graph TD
 
 The core C++20 engine strictly adheres to Deterministic Safety Invariants (Power of 10):
 1. **Simple Control Flow:** Zero `goto`, `setjmp`, `longjmp`, or recursion.
-2. **Bounded Loops:** All loops have fixed, compile-time bounds (`MAX_ASSETS = 256`, `LOOKBACK_WINDOW = 64`).
+2. **Bounded Loops:** All loops have fixed, compile-time bounds (`CrossSectionalRanker<64>` assets, `ParkinsonEstimator<4>` bars — see `src/main.cpp`).
 3. **Zero Dynamic Allocation:** Static pre-allocation with ring buffers; zero `malloc` or `new` on the hot processing path.
 4. **Function Length:** Every function is under 60 lines.
 5. **Assertion Density:** Minimum of 2 assertions per function enforcing numerical and structural invariants.
@@ -68,7 +68,7 @@ The FastMCP server (`python3 -m cmc_terminal.server`) exposes 5 production tools
 | `cmc_volatility_regime` | `symbol: str` | `Dict[str, Any]` | Computes Parkinson extreme-value volatility and classifies regime (`COMPRESSION`, `TRENDING`, `EXPANSION_VOLATILE`). |
 | `cmc_liquidity_depth` | `symbol: str` | `Dict[str, Any]` | Analyzes volume-to-market-cap ratio, liquidity quality grade, and slippage drag. |
 | `cmc_global_macro` | *(none)* | `Dict[str, Any]` | Global market cap, 24h volume, BTC/ETH dominance, and macro cycle phase. |
-| `cmc_alpha_signals` | `limit: int` | `Dict[str, Any]` | Multi-factor composite signals with execution directives (`LONG`, `HOLD`, `AVOID`). |
+| `cmc_alpha_signals` | `limit: int` | `Dict[str, Any]` | Multi-factor composite signals with execution directives (`LONG`, `NEUTRAL`, `AVOID`). |
 
 ### Dual-Mode Output Architecture
 Every tool returns a structured JSON dictionary containing:

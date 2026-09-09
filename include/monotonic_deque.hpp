@@ -3,8 +3,8 @@
 
 #include <cstddef>
 #include <cassert>
+#include <cmath>
 #include <array>
-#include <algorithm>
 
 namespace cmc {
 
@@ -49,7 +49,7 @@ public:
                 res = buffer_[i];
             }
         }
-        assert(res <= buffer_[0] || count_ == 1 || count_ > 1);
+        assert(res <= buffer_[0]);
         return res;
     }
 
@@ -61,7 +61,7 @@ public:
                 res = buffer_[i];
             }
         }
-        assert(res >= buffer_[0] || count_ == 1 || count_ > 1);
+        assert(res >= buffer_[0]);
         return res;
     }
 

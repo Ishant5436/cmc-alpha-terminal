@@ -90,6 +90,7 @@ public:
 
     [[nodiscard]] const Item* get_item(std::size_t idx) const noexcept {
         assert(idx < count_);
+        assert(count_ <= MaxAssets);
         return &items_[idx];
     }
 };

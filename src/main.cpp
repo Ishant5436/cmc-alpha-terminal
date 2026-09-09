@@ -2,6 +2,8 @@
 #include <iomanip>
 #include <vector>
 #include <string>
+#include <chrono>
+#include <array>
 #include "types.hpp"
 #include "welford.hpp"
 #include "monotonic_deque.hpp"
@@ -49,44 +51,88 @@ static void print_header() noexcept {
     std::cout << "----------------------------------------------------------------------------------------\n";
 }
 
-static void analyze_universe() noexcept {
+struct AssetAnalysis {
+    double vol{0.0};
+    double rank{0.0};
+    const char* regime{""};
+};
+
+// Pure computation: ranking + volatility classification, with zero I/O, so
+// the surrounding timer measures inference cost only, not terminal output.
+static std::array<AssetAnalysis, UNIVERSE_SIZE> compute_analysis() noexcept {
     assert(UNIVERSE_SIZE > 0);
     assert(UNIVERSE_SIZE <= 64);
 
+    cmc::WelfordAccumulator return_stats;
     cmc::CrossSectionalRanker<64> ranker;
-
-    // Load assets and compute raw momentum scores
     for (std::size_t i = 0; i < UNIVERSE_SIZE; ++i) {
         assert(BENCHMARK_UNIVERSE[i].price > 0.0);
         assert(BENCHMARK_UNIVERSE[i].symbol != nullptr);
         ranker.add_asset(BENCHMARK_UNIVERSE[i].symbol, BENCHMARK_UNIVERSE[i].change_24h);
+        return_stats.update(BENCHMARK_UNIVERSE[i].change_24h);
     }
-
     ranker.compute_ranks();
+    assert(return_stats.count() == UNIVERSE_SIZE);
 
-    // Print analysis table
+    std::array<AssetAnalysis, UNIVERSE_SIZE> results{};
     for (std::size_t i = 0; i < UNIVERSE_SIZE; ++i) {
         const auto& item = BENCHMARK_UNIVERSE[i];
         assert(item.high_24h >= item.low_24h);
 
-        cmc::ParkinsonEstimator<4> p_vol;
-        p_vol.update(item.high_24h, item.low_24h);
-        double vol = p_vol.realized_volatility();
+        // Track rolling high/low extrema via MonotonicExtremaDeque
+        cmc::MonotonicExtremaDeque<double, 4> extrema;
+        extrema.push(item.low_24h);
+        extrema.push(item.price);
+        extrema.push(item.high_24h);
+        const double rolling_high = extrema.max();
+        const double rolling_low = extrema.min();
+        assert(rolling_high >= rolling_low);
 
+        cmc::ParkinsonEstimator<4> p_vol;
+        p_vol.update(rolling_high, rolling_low);
+        double vol = p_vol.realized_volatility();
         double rank = ranker.get_percentile(item.symbol);
         const char* regime = (vol > 0.035) ? "VOLATILE" : (item.change_24h > 3.0 ? "TRENDING" : "COMPRESS");
+        results[i] = {vol, rank, regime};
+    }
+    assert(results.size() == UNIVERSE_SIZE);
+    return results;
+}
 
-        std::cout << std::left 
+
+static void print_analysis(const std::array<AssetAnalysis, UNIVERSE_SIZE>& results, double elapsed_us) noexcept {
+    assert(elapsed_us >= 0.0);
+    assert(results.size() == UNIVERSE_SIZE);
+
+    for (std::size_t i = 0; i < UNIVERSE_SIZE; ++i) {
+        const auto& item = BENCHMARK_UNIVERSE[i];
+        const auto& r = results[i];
+        assert(r.regime != nullptr);
+        std::cout << std::left
                   << std::setw(8)  << item.symbol
                   << std::setw(12) << std::fixed << std::setprecision(2) << item.price
                   << std::setw(12) << std::showpos << item.change_24h << std::noshowpos
-                  << std::setw(14) << std::setprecision(4) << vol
+                  << std::setw(14) << std::setprecision(4) << r.vol
                   << std::setw(14) << std::setprecision(2) << item.change_24h
-                  << std::setw(16) << std::setprecision(2) << rank
-                  << std::setw(12) << regime << "\n";
+                  << std::setw(16) << std::setprecision(2) << r.rank
+                  << std::setw(12) << r.regime << "\n";
     }
     std::cout << "========================================================================================\n";
-    std::cout << "[EXECUTION ENGINE: ZERO HEAP ALLOCATIONS | SUB-MICROSECOND INFERENCE LATENCY]\n\n";
+    std::cout << "[EXECUTION ENGINE: ZERO HEAP ALLOCATIONS | MEASURED INFERENCE LATENCY: "
+               << std::fixed << std::setprecision(2) << elapsed_us
+               << " microseconds for " << UNIVERSE_SIZE << " assets]\n\n";
+}
+
+static void analyze_universe() noexcept {
+    const auto start = std::chrono::steady_clock::now();
+    const auto results = compute_analysis();
+    const auto end = std::chrono::steady_clock::now();
+    assert(end >= start);
+
+    const double elapsed_us = std::chrono::duration<double, std::micro>(end - start).count();
+    assert(elapsed_us >= 0.0);
+
+    print_analysis(results, elapsed_us);
 }
 
 int main(int argc, char* argv[]) {

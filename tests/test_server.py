@@ -74,11 +74,13 @@ def test_mcp_agent_tool_chaining():
     assert liq_res["turnover_ratio"] >= 0.0
 
 def test_mcp_input_validation():
-    with pytest.raises(AssertionError):
-        asyncio.run(cmc_screen_momentum(top_n=0))
+    """Invalid input returns a structured error, not an AssertionError that
+    would silently disappear under `python -O`/PYTHONOPTIMIZE=1."""
+    result = asyncio.run(cmc_screen_momentum(top_n=0))
+    assert "error" in result
 
-    with pytest.raises(AssertionError):
-        asyncio.run(cmc_volatility_regime(""))
+    result = asyncio.run(cmc_volatility_regime(""))
+    assert "error" in result
 
 
 def test_mcp_none_value_resilience(monkeypatch):
