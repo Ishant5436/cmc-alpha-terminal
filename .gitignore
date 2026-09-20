@@ -1,6 +1,7 @@
 # Build Artifacts
 bin/
 build/
+target/
 *.o
 *.so
 *.dylib

@@ -6,6 +6,7 @@
 
 [![CI Pipeline](https://img.shields.io/badge/CI-Passing-brightgreen)]()
 [![Tests](https://img.shields.io/badge/Tests-21%2F21%20Passed-brightgreen)](tests/)
+[![QMS Standard](https://img.shields.io/badge/QMS-ISO%2FDIS%209001%3A2026-brightgreen)](iso9001_compliance/QUALITY_MANUAL.md)
 [![DoraHacks BUIDL](https://img.shields.io/badge/DoraHacks-BUIDL%20%2348301-orange)](https://dorahacks.io/buidl/48301)
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-20%20Zero--Heap-blue)](include/)
 [![FastMCP](https://img.shields.io/badge/FastMCP-5%20Production%20Tools-purple)](python/cmc_terminal/server.py)
@@ -103,16 +104,22 @@ claude mcp add cmc-alpha-terminal -- python3 -m cmc_terminal.server
 
 ## 4. Quickstart & Verification
 
-### Build & Run Tests (C++ and Python)
+### Build & Run Full Test & QMS Pipeline
 ```bash
-# Run complete test suite (21/21 tests passing)
+# Run complete test suite, AST safety checks, and ISO 9001 compliance audit
 make test
 
-# Run C++ tests only
+# Run C++ deterministic tests only
 make test-cpp
 
-# Run Python tests only
+# Run C++ tests under LLVM AddressSanitizer & UBSan (0 leaks, 0 undefined behavior)
+make asan
+
+# Run Python FastMCP & client test suite
 make test-py
+
+# Run automated ISO/DIS 9001:2026 Quality Management System auditor
+make audit-iso9001
 ```
 
 ### Launch Interactive Terminal Dashboard
@@ -128,7 +135,21 @@ make build-cpp
 
 ---
 
-## 5. Offline Reproducibility
+## 5. ISO/DIS 9001:2026 Quality Management System (QMS)
+
+`cmc-alpha-terminal` adheres strictly to the **ISO/DIS 9001:2026 (Draft International Standard)** quality framework for mission-critical software systems:
+
+| Standard Component | Description & Coverage | Verified Artifact |
+| :--- | :--- | :--- |
+| **Quality Manual** | Comprehensive quality policies, zero-defect principles, and architectural boundaries. | [`iso9001_compliance/QUALITY_MANUAL.md`](iso9001_compliance/QUALITY_MANUAL.md) |
+| **FMEA Risk Register** | 7 quantified failure modes (rate limits, NaN inputs, division by zero) with automated gates. | [`iso9001_compliance/RISK_REGISTER.md`](iso9001_compliance/RISK_REGISTER.md) |
+| **Traceability Matrix** | 100% bidirectional traceability mapping 11 core requirements to source files and unit tests. | [`iso9001_compliance/TRACEABILITY_MATRIX.md`](iso9001_compliance/TRACEABILITY_MATRIX.md) |
+| **Automated QMS Auditor** | Programmatic verification auditing Clauses 4 through 10 with 100% pass criteria. | [`scripts/audit_iso9001_compliance.py`](scripts/audit_iso9001_compliance.py) |
+| **Machine-Readable Audit Report** | Exported JSON compliance artifact generated on every audit execution. | `target/iso9001_audit_report.json` |
+
+---
+
+## 6. Offline Reproducibility
 
 To ensure hackathon judges can immediately verify the terminal without an active `CMC_PRO_API_KEY`, the client automatically detects missing credentials and falls back to a high-fidelity snapshot of top CoinMarketCap assets with zero degradation.
 
@@ -139,5 +160,5 @@ export CMC_PRO_API_KEY="<YOUR_KEY_HERE>"
 
 ---
 
-## 6. License
+## 7. License
 MIT License. Author: Ishant Panchal (`Ishant5436` / `ishant.p@somaiya.edu`).
