@@ -1,11 +1,15 @@
+<p align="center">
+  <img src="assets/cmc_alpha_logo.png" width="180" height="180" alt="CMC Alpha Monogram" />
+</p>
+
 # CMC-Alpha-Terminal
 
-> **Institutional-Grade Quantitative Intelligence & FastMCP Agent Terminal Powered by CoinMarketCap Pro API**  
+> **Institutional Quantitative Intelligence & FastMCP Agent Terminal Powered by CoinMarketCap Pro API**  
 > *Target Competition:* CoinMarketCap: Build with CMC: API Hackathon (Prize: CMC Pro-API 1-Year Grant + Ecosystem Support for Top 3 Projects)  
-> *Standards:* Deterministic Safety Invariants (Power of 10), Zero Heap on Hot Path, Sub-Millisecond Execution
+> *Standards:* Deterministic Safety Invariants, Zero Dynamic Memory on Hot Path, Sub-Millisecond Execution
 
 [![CI Pipeline](https://img.shields.io/badge/CI-Passing-brightgreen)]()
-[![Tests](https://img.shields.io/badge/Tests-21%2F21%20Passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-23%2F23%20Passed-brightgreen)](tests/)
 [![QMS Standard](https://img.shields.io/badge/QMS-ISO%2FDIS%209001%3A2026-brightgreen)](iso9001_compliance/QUALITY_MANUAL.md)
 [![DoraHacks BUIDL](https://img.shields.io/badge/DoraHacks-BUIDL%20%2348301-orange)](https://dorahacks.io/buidl/48301)
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-20%20Zero--Heap-blue)](include/)
@@ -43,9 +47,9 @@ graph TD
 
 ---
 
-## 2. Deterministic Safety Invariants (Power of 10)
+## 2. Deterministic Safety Invariants (Holzmann Standard)
 
-The core C++20 engine strictly adheres to Deterministic Safety Invariants (Power of 10):
+The core C++20 engine strictly adheres to Gerard J. Holzmann's deterministic safety rules:
 1. **Simple Control Flow:** Zero `goto`, `setjmp`, `longjmp`, or recursion.
 2. **Bounded Loops:** All loops have fixed, compile-time bounds (`CrossSectionalRanker<64>` assets, `ParkinsonEstimator<4>` bars — see `src/main.cpp`).
 3. **Zero Dynamic Allocation:** Static pre-allocation with ring buffers; zero `malloc` or `new` on the hot processing path.
