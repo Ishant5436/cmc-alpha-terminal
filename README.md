@@ -22,7 +22,7 @@
 
 Autonomous AI agents (Claude, Gemini) and algorithmic quantitative systems require sub-millisecond market regime classification, liquidity depth auditing, and cross-sectional factor ranking across the global cryptocurrency universe.
 
-`cmc-alpha-terminal` combines an ultra-fast **C++20 zero-heap quantitative execution core** with a **Python FastMCP agent server** and an **interactive ANSI terminal dashboard**, ingesting CoinMarketCap Pro API data for real-time risk gating and alpha generation.
+High-throughput C++20 quantitative engine architected under deterministic safety invariants to prevent memory bloat and latency spikes on agent execution loops. Calculates online Welford variance, Parkinson realized volatility, and cross-sectional liquidity metrics across 10,000+ crypto pairs with zero post-init dynamic heap allocations. Ingests CoinMarketCap Pro API data for real-time risk gating and alpha generation via FastMCP.
 
 ```mermaid
 graph TD
