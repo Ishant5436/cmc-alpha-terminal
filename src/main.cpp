@@ -37,7 +37,7 @@ static constexpr std::size_t UNIVERSE_SIZE = sizeof(BENCHMARK_UNIVERSE) / sizeof
 
 static void print_header() noexcept {
     assert(UNIVERSE_SIZE > 0);
-    assert(BENCHMARK_UNIVERSE != nullptr);
+    assert(BENCHMARK_UNIVERSE[0].symbol != nullptr);
     std::cout << "\n========================================================================================\n";
     std::cout << "                 CMC-ALPHA-TERMINAL: C++20 QUANTITATIVE CORE ENGINE                     \n";
     std::cout << "        Zero-Heap High-Frequency Regime Classifier & Cross-Sectional Alpha Ranker        \n";
